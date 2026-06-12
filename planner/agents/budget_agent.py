@@ -24,7 +24,9 @@ class BudgetAgent(BaseAgent):
         if itinerary_result and itinerary_result.get("status") == "success":
             for day in itinerary_result.get("days", []):
                 for slot in day.get("slots", []):
-                    itinerary_activities.append(f"Day {day['day_number']}: {slot['attraction_name']} ({slot['activity_desc']})")
+                    desc = slot.get('activity_desc', '')
+                    desc_str = f" ({desc})" if desc else ""
+                    itinerary_activities.append(f"Day {day['day_number']}: {slot['attraction_name']}{desc_str}")
         else:
             itinerary_activities = [a["name"] for a in destination_result.get("attractions", [])]
 
