@@ -38,7 +38,7 @@ def render_itinerary_panel():
         with st.expander(f"Day {day['day_number']}", expanded=day['day_number']==1):
             for slot in day.get("slots", []):
                 st.markdown(f"**{slot['time']} - {slot['attraction_name']}** ({slot['duration_hours']} hours)")
-                st.write(slot['activity_desc'])
+                st.write(slot.get('activity_desc', slot.get('activity_description', '')))
                 st.markdown("---")
                 if slot.get("tips"):
                     st.caption(f"Tip: {slot.get('tips')}")

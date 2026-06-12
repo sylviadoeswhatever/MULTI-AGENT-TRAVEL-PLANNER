@@ -19,8 +19,8 @@ class ItineraryAgent(BaseAgent):
 
         system_prompt = """
         You are an expert travel itinerary planner.
-        Create a realistic, enjoyable day-by-day travel schedule.
-        Include meal breaks.
+        Create a basic, concise day-by-day travel schedule.
+        Keep descriptions extremely short and simple to save tokens.
         JSON format:
         {
           "days": [
@@ -31,9 +31,8 @@ class ItineraryAgent(BaseAgent):
                 {
                   "time": "09:00 AM",
                   "attraction_name": "...",
-                  "activity_description": "...",
-                  "duration_hours": 2.0,
-                  "tips": "..."
+                  "activity_desc": "...",
+                  "duration_hours": 2.0
                 }
               ]
             }
@@ -50,7 +49,7 @@ class ItineraryAgent(BaseAgent):
         """
 
         try:
-            result = await batcher.submit(system_prompt, user_prompt, max_tokens=1500)
+            result = await batcher.submit(system_prompt, user_prompt, max_tokens=600)
             
             days_out = result.get("days", [])
             
