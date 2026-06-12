@@ -21,7 +21,7 @@ class ItineraryAgent(BaseAgent):
         You are an expert travel itinerary planner.
         Create a concise day-by-day travel schedule.
         CRITICAL RULES:
-        1. Keep descriptions brief (1 sentence max).
+        1. DO NOT include activity_desc (it is not needed).
         2. Provide 3 to 4 slots max per day to save tokens.
         JSON format:
         {
@@ -33,7 +33,6 @@ class ItineraryAgent(BaseAgent):
                 {
                   "time": "09:00 AM",
                   "attraction_name": "...",
-                  "activity_desc": "...",
                   "duration_hours": 3.0
                 }
               ]
