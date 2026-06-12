@@ -50,7 +50,9 @@ class ItineraryAgent(BaseAgent):
         """
 
         try:
-            result = await batcher.submit(system_prompt, user_prompt, max_tokens=500)
+            # Give enough token headroom to finish the JSON without getting cut off
+            calc_tokens = min(2500, 400 + int(days) * 200)
+            result = await batcher.submit(system_prompt, user_prompt, max_tokens=calc_tokens)
             
             days_out = result.get("days", [])
             
