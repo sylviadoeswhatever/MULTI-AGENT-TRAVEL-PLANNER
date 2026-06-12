@@ -32,13 +32,16 @@ class BudgetAgent(BaseAgent):
 
         system_prompt = """
         You are a travel budget analyst.
-        Provide realistic INR cost estimates for each activity, meal, and transport based precisely on the user's itinerary.
+        Provide realistic INR cost estimates for activities, meals, transport, and accommodation.
         The user has provided a Maximum Budget and an allowed flexibility Margin.
+        CRITICAL RULES:
+        1. Transport and Accommodation costs MUST ONLY go into their top-level fields (`travel_cost_rs` and `accommodation_cost_rs`).
+        2. DO NOT include Transport or Accommodation inside the `items` array.
         JSON format:
         {
           "items": [
             {
-              "category": "Activities|Meals|Transport|Accommodation|Miscellaneous",
+              "category": "Activities|Meals|Miscellaneous",
               "name": "Item name",
               "estimated_cost_rs": 500,
               "notes": "Optional note"
