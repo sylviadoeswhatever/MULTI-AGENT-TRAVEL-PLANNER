@@ -14,6 +14,7 @@ class TravelStyle(str, Enum):
     CORPORATE = "corporate"
 
 class UserInputState(TypedDict):
+    start_location: str
     destination: str
     days: int
     nights: int

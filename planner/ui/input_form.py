@@ -13,6 +13,10 @@ def render_input_form():
     errors = st.session_state.form_errors
 
     with st.form("travel_form"):
+        start_loc = st.text_input("Start City/Location :red[*]")
+        if "start_location" in errors:
+            st.markdown(f'<p class="error-text">{errors["start_location"]}</p>', unsafe_allow_html=True)
+            
         dest = st.text_input("Destination City/Country :red[*]")
         if "destination" in errors:
             st.markdown(f'<p class="error-text">{errors["destination"]}</p>', unsafe_allow_html=True)
@@ -36,14 +40,17 @@ def render_input_form():
         
         style = st.selectbox(
             "Travel Style (Optional)", 
-            ["", TravelStyle.ADVENTURE.value, TravelStyle.CALM_PEACEFUL_SIGHTINGS.value, TravelStyle.LOCAL_TRAVELLER.value, TravelStyle.CORPORATE.value],
-            format_func=lambda x: "Select..." if x == "" else x.replace('_', ' ').title()
+            [TravelStyle.ADVENTURE.value, TravelStyle.CALM_PEACEFUL_SIGHTINGS.value, TravelStyle.LOCAL_TRAVELLER.value, TravelStyle.CORPORATE.value],
+            index=None,
+            placeholder="Select...",
+            format_func=lambda x: x.replace('_', ' ').title()
         )
         
         submit = st.form_submit_button("Plan My Trip")
 
     if submit:
         inputs = {
+            "start_location": start_loc,
             "destination": dest,
             "days": int(days) if days is not None else 0,
             "nights": int(nights) if nights is not None else -1,

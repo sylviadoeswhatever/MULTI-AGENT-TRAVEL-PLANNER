@@ -1,6 +1,9 @@
 def validate_user_input(inputs: dict) -> tuple[bool, dict]:
     errors = {}
     
+    if not inputs.get("start_location", "").strip():
+        errors["start_location"] = "Start Location is required."
+        
     if not inputs.get("destination", "").strip():
         errors["destination"] = "Destination is required."
 

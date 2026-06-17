@@ -11,6 +11,7 @@ class BudgetAgent(BaseAgent):
         self.set_status(AgentStatus.RUNNING)
         logger.info(f"[{self.name}] Estimating trip budget.")
 
+        start_loc = user_input.get("start_location", "")
         dest = destination_result.get("validated_destination", "")
         days = user_input.get("days", 1)
         nights = user_input.get("nights", 0)
@@ -35,8 +36,9 @@ class BudgetAgent(BaseAgent):
         Provide realistic INR cost estimates for activities, meals, transport, and accommodation.
         The user has provided a Maximum Budget and an allowed flexibility Margin.
         CRITICAL RULES:
-        1. Transport and Accommodation costs MUST ONLY go into their top-level fields (`travel_cost_rs` and `accommodation_cost_rs`).
-        2. DO NOT include Transport or Accommodation inside the `items` array.
+        1. Identify the nearest major airports for both the Start Location and the Destination. Calculate the estimated round-trip flight costs between these two airports and include it as the `travel_cost_rs`.
+        2. Transport and Accommodation costs MUST ONLY go into their top-level fields (`travel_cost_rs` and `accommodation_cost_rs`).
+        3. DO NOT include Transport or Accommodation inside the `items` array.
         JSON format:
         {
           "items": [
@@ -53,6 +55,7 @@ class BudgetAgent(BaseAgent):
         """
 
         user_prompt = f"""
+        Start Location: {start_loc}
         Destination: {dest}
         Duration: {days} days, {nights} nights
         Travel style: {style or 'standard'}
