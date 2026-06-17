@@ -72,8 +72,28 @@ class BudgetAgent(BaseAgent):
             if not isinstance(items, list):
                 items = []
                 
-            travel_cost = float(result.get("travel_cost_rs", 0.0))
-            acc_cost = float(result.get("accommodation_cost_rs", 0.0))
+            # Check alternative keys first
+            travel_cost = float(result.get("travel_cost_rs", result.get("transport_cost_rs", result.get("flight_cost_rs", 0.0))))
+            acc_cost = float(result.get("accommodation_cost_rs", result.get("hotel_cost_rs", 0.0)))
+            
+            # Fallback: Extract from items if still 0
+            if travel_cost == 0.0 or acc_cost == 0.0:
+                filtered_items = []
+                for item in items:
+                    cat = item.get("category", "").lower()
+                    name = item.get("name", "").lower()
+                    cost = float(item.get("estimated_cost_rs", 0.0))
+                    
+                    is_travel = "transport" in cat or "travel" in cat or "flight" in cat or "flight" in name or "transport" in name
+                    is_acc = "accommodation" in cat or "hotel" in cat or "stay" in cat or "hotel" in name or "accommodation" in name
+                    
+                    if travel_cost == 0.0 and is_travel:
+                        travel_cost += cost
+                    elif acc_cost == 0.0 and is_acc:
+                        acc_cost += cost
+                    else:
+                        filtered_items.append(item)
+                items = filtered_items
             
             total = sum(float(item.get("estimated_cost_rs", 0)) for item in items) + travel_cost + acc_cost
             remaining = budget_rs - total

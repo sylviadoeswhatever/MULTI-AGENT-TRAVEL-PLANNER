@@ -22,9 +22,27 @@ def render_budget_panel():
     rem = res.get('remaining_budget_rs', 0)
     
     col1, col2, col3 = st.columns(3)
+    if rem >= 0:
+        delta_text = "Within Budget"
+        delta_color = "normal"
+    elif res.get('is_within_budget'):
+        delta_text = "Within Flexible Limits"
+        delta_color = "off"
+    else:
+        delta_text = "Over Budget"
+        delta_color = "inverse"
+
     col1.metric("Maximum Budget", f"₹{budget_rs:,.2f}")
-    col2.metric("Estimated Total", f"₹{est:,.2f}", delta="Within Budget" if res.get('is_within_budget') else "Over Budget", delta_color="normal" if res.get('is_within_budget') else "inverse")
-    col3.metric("Remaining Funds", f"₹{rem:,.2f}")
+    col2.metric("Estimated Total", f"₹{est:,.2f}", delta=delta_text, delta_color=delta_color)
+    
+    if rem >= 0:
+        title = "Remaining Funds"
+    elif res.get('is_within_budget'):
+        title = "Within Flexible Limits"
+    else:
+        title = "Exceeding Budget"
+        
+    col3.metric(title, f"₹{abs(rem):,.2f}" if rem < 0 else f"₹{rem:,.2f}")
     
     st.markdown("---")
     st.subheader("Financial Breakdown")

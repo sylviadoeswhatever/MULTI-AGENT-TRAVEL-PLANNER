@@ -13,21 +13,21 @@ def render_input_form():
     errors = st.session_state.form_errors
 
     with st.form("travel_form"):
-        dest = st.text_input("Destination City/Country *")
+        dest = st.text_input("Destination City/Country :red[*]")
         if "destination" in errors:
             st.markdown(f'<p class="error-text">{errors["destination"]}</p>', unsafe_allow_html=True)
         
         col1, col2 = st.columns(2)
         with col1:
-            days = st.number_input("Duration (Days) *", min_value=1, value=None, placeholder="e.g. 5")
+            days = st.number_input("Duration (Days) :red[*]", min_value=1, value=None, placeholder="e.g. 5")
             if "days" in errors:
                 st.markdown(f'<p class="error-text">{errors["days"]}</p>', unsafe_allow_html=True)
         with col2:
-            nights = st.number_input("Duration (Nights) *", min_value=0, value=None, placeholder="e.g. 4")
+            nights = st.number_input("Duration (Nights) :red[*]", min_value=0, value=None, placeholder="e.g. 4")
             if "nights" in errors:
                 st.markdown(f'<p class="error-text">{errors["nights"]}</p>', unsafe_allow_html=True)
             
-        budget = st.number_input("Maximum Budget (₹ INR) *", min_value=1.0, value=None, step=1000.0, placeholder="e.g. 50000")
+        budget = st.number_input("Maximum Budget (₹ INR) :red[*]", min_value=1.0, value=None, step=1000.0, placeholder="e.g. 50000")
         if "budget_rs" in errors:
             st.markdown(f'<p class="error-text">{errors["budget_rs"]}</p>', unsafe_allow_html=True)
             
@@ -36,7 +36,7 @@ def render_input_form():
         
         style = st.selectbox(
             "Travel Style (Optional)", 
-            ["", TravelStyle.ADVENTURE.value, TravelStyle.CALM_PEACEFUL_SIGHTINGS.value, TravelStyle.LOCAL_TRAVELLER.value],
+            ["", TravelStyle.ADVENTURE.value, TravelStyle.CALM_PEACEFUL_SIGHTINGS.value, TravelStyle.LOCAL_TRAVELLER.value, TravelStyle.CORPORATE.value],
             format_func=lambda x: "Select..." if x == "" else x.replace('_', ' ').title()
         )
         

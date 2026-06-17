@@ -9,7 +9,7 @@ from ui.packing_panel import render_packing_panel
 from state.schema import AgentStatus
 
 # Page config
-st.set_page_config(page_title="AI Travel Planner", layout="wide", initial_sidebar_state="expanded")
+st.set_page_config(page_title="AI Travel Planner", page_icon="🗺️", layout="wide", initial_sidebar_state="expanded")
 
 # Custom CSS for Cyberpunk HUD Aesthetic
 st.markdown("""

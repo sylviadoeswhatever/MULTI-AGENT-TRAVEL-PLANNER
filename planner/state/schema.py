@@ -11,6 +11,7 @@ class TravelStyle(str, Enum):
     ADVENTURE = "adventure"
     CALM_PEACEFUL_SIGHTINGS = "calm_peaceful_sightings"
     LOCAL_TRAVELLER = "local_traveller"
+    CORPORATE = "corporate"
 
 class UserInputState(TypedDict):
     destination: str
