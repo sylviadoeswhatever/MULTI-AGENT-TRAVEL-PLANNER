@@ -22,7 +22,7 @@ def render_destination_panel():
     for i, attr in enumerate(res.get("attractions", [])):
         with cols[i % 4]:
             st.subheader(attr["name"])
-            st.image(attr["image_url"], width="stretch")
+            st.markdown(f'<img src="{attr["image_url"]}" style="width: 100%; border-radius: 4px;" alt="{attr["name"]}">', unsafe_allow_html=True)
             st.write(attr["description"])
             
             # Know More Expander

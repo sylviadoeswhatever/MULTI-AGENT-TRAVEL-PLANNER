@@ -51,14 +51,13 @@ class DestinationAgent(BaseAgent):
                 self.set_status(AgentStatus.DONE)
                 return {**DEFAULT_DESTINATION_RESULT, "status": "error", "error_msg": result.get("reason", "Invalid destination.")}
 
-            # Add real images from Wikipedia
+            # Add real images from Wikipedia concurrently
             import urllib.request
+            import urllib.parse
             import json
-            for attr in result.get("attractions", []):
-                attr["know_more_fetched"] = False
-                attr["details"] = None
-                
-                # Fetch real image from Wikipedia API
+            import asyncio
+            
+            def fetch_image_url(attr):
                 try:
                     query = urllib.parse.quote(attr.get("name", ""))
                     url = f"https://en.wikipedia.org/w/api.php?action=query&generator=search&gsrsearch={query}&gsrlimit=1&prop=pageimages&format=json&pithumbsize=400"
@@ -69,14 +68,18 @@ class DestinationAgent(BaseAgent):
                         if pages:
                             page = next(iter(pages.values()))
                             if "thumbnail" in page:
-                                attr["image_url"] = page["thumbnail"]["source"]
-                            else:
-                                attr["image_url"] = "https://upload.wikimedia.org/wikipedia/commons/thumb/a/ac/No_image_available.svg/400px-No_image_available.svg.png"
-                        else:
-                            attr["image_url"] = "https://upload.wikimedia.org/wikipedia/commons/thumb/a/ac/No_image_available.svg/400px-No_image_available.svg.png"
+                                return page["thumbnail"]["source"]
                 except Exception as e:
                     logger.warning(f"Failed to fetch image for {attr.get('name')}: {e}")
-                    attr["image_url"] = "https://upload.wikimedia.org/wikipedia/commons/thumb/a/ac/No_image_available.svg/400px-No_image_available.svg.png"
+                return "https://upload.wikimedia.org/wikipedia/commons/thumb/a/ac/No_image_available.svg/400px-No_image_available.svg.png"
+
+            attractions = result.get("attractions", [])
+            image_urls = await asyncio.gather(*[asyncio.to_thread(fetch_image_url, attr) for attr in attractions])
+            
+            for attr, img_url in zip(attractions, image_urls):
+                attr["know_more_fetched"] = False
+                attr["details"] = None
+                attr["image_url"] = img_url
 
             self.set_status(AgentStatus.DONE)
             return {
