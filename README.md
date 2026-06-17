@@ -1,5 +1,7 @@
 # Multi-Agent AI Travel Intelligence Platform
 
+🚀 **[Try the Live Demo on Streamlit](https://multi-agent-travel-planner.streamlit.app/)**
+
 ![App Preview](https://via.placeholder.com/1000x500.png?text=Preview+Image+Placeholder)
 
 ## Overview
@@ -18,8 +20,8 @@
 
 1. **Clone the repository:**
    ```bash
-   git clone https://github.com/yourusername/ai-travel-planner.git
-   cd ai-travel-planner
+   git clone https://github.com/sylviadoeswhatever/MULTI-AGENT-TRAVEL-PLANNER.git
+   cd MULTI-AGENT-TRAVEL-PLANNER
    ```
 
 2. **Install dependencies:**
